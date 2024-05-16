@@ -797,3 +797,21 @@ require("monokai-pro").setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+local client = vim.lsp.start_client({
+	name = "lsp-tj",
+	cmd = { "/home/egarza/dev/lsp-tj/main" },
+	on_attach = function(client, bufnr) end,
+})
+
+if not client then
+	vim.notify("Something is wrong with lsp-tj")
+	return
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "markdown",
+	callback = function()
+		vim.lsp.buf_attach_client(0, client)
+	end,
+})
